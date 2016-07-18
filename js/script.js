@@ -37,6 +37,29 @@ function loadData() {
     //     elem.src = "https://static.pexels.com/photos/6480/person-woman-girl-model.jpg";
     //     $body.append(elem)
 
+    // ----------------------
+    // Your NY Times AJAX request goes HERE
+
+    var nyurl = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q="+ city + "&sort=newest&api-key=e90727b71a1043af91cfd139d022b058";
+    console.log(nyurl);
+    $.getJSON(nyurl,function(data){
+      $nytHeaderElem.text('New York Times Articles About ' + city);
+
+
+      articles = data.response.docs;
+      // console.log(articles);
+      for(var i=0;i<articles.length;i++){
+        var article = articles[i];
+        // console.log(article.web_url, article.headline.main,article.snippet);
+        $nytElem.append('<li class="article">' +
+        '<a href="' + article.web_url + '">' + article.headline.main + '</a>' +
+        '<p>' + article.snippet + '</p>' +
+        '</li>');
+      }
+    });
+
+
+
     return false;
 };
 
