@@ -42,6 +42,7 @@ function loadData() {
 
     var nyurl = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q="+ city + "&sort=newest&api-key=e90727b71a1043af91cfd139d022b058";
     console.log(nyurl);
+
     $.getJSON(nyurl,function(data){
       $nytHeaderElem.text('New York Times Articles About ' + city);
 
@@ -56,6 +57,8 @@ function loadData() {
         '<p>' + article.snippet + '</p>' +
         '</li>');
       }
+    }).error(function(){
+      $nytHeaderElem.text('New York Times Articles Could Not Be Loaded');
     });
 
 
