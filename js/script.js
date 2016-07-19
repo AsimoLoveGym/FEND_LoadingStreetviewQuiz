@@ -62,6 +62,26 @@ function loadData() {
     });
 
 
+    // var wikiURL = "https://en.wikipedia.org/w/api.php?action=query&titles="+ city + "%20Page&prop=revisions&rvprop=content&format=json";
+    var wikiURL = "http://en.wikipedia.org/w/api.php?action=opensearch&search="+city+"&format=json&callback=wikiCallback";
+
+    $.ajax({
+      url: wikiURL,
+      // data: queryData,
+      dataType: 'jsonp',
+      // type: 'POST',
+      // headers: { 'Api-User-Agent': 'Example/1.0' },
+      // success: function(data) { // do something with data
+      // };
+    }).done(function(response){
+      var articleList = response[1];
+
+      for(var i=0; i<articleList.length; i++){
+        articleStr = articleList[i];
+        var url = 'http://en.wikipedia.org/wiki/'+articleStr;
+        $wikiElem.append('<li><a href=' + url +'>' + articleStr + '</a><li>');
+      };
+    });
 
     return false;
 };
