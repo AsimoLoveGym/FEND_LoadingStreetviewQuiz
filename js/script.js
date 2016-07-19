@@ -42,6 +42,7 @@ function loadData() {
 
     var nyurl = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q="+ city + "&sort=newest&api-key=e90727b71a1043af91cfd139d022b058";
     console.log(nyurl);
+
     $.getJSON(nyurl,function(data){
       $nytHeaderElem.text('New York Times Articles About ' + city);
 
@@ -56,9 +57,31 @@ function loadData() {
         '<p>' + article.snippet + '</p>' +
         '</li>');
       }
+    }).error(function(){
+      $nytHeaderElem.text('New York Times Articles Could Not Be Loaded');
     });
 
 
+    // var wikiURL = "https://en.wikipedia.org/w/api.php?action=query&titles="+ city + "%20Page&prop=revisions&rvprop=content&format=json";
+    var wikiURL = "http://en.wikipedia.org/w/api.php?action=opensearch&search="+city+"&format=json&callback=wikiCallback";
+
+    $.ajax({
+      url: wikiURL,
+      // data: queryData,
+      dataType: 'jsonp',
+      // type: 'POST',
+      // headers: { 'Api-User-Agent': 'Example/1.0' },
+      // success: function(data) { // do something with data
+      // };
+    }).done(function(response){
+      var articleList = response[1];
+
+      for(var i=0; i<articleList.length; i++){
+        articleStr = articleList[i];
+        var url = 'http://en.wikipedia.org/wiki/'+articleStr;
+        $wikiElem.append('<li><a href=' + url +'>' + articleStr + '</a><li>');
+      };
+    });
 
     return false;
 };
